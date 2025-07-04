@@ -9,4 +9,4 @@ const userValidationSchema = zod.object({
     roleId:zod.string()
 }).strict();
 
-module.exports = userValidationSchema;
+module.exports = userValidationSchema
