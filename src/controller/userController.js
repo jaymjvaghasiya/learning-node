@@ -1,4 +1,5 @@
 const userModel = require('../model/userModel');
+const sendMail = require('../utils/sendMail');
 
 const msg = "Internal server err";
 
@@ -129,6 +130,7 @@ const getUserById = async (req, res) => {
 const createNewUser = async (req, res) => {
     try {
         const newuser = await userModel.create(req.body)
+        await sendMail(newuser.email, "WELCOME", newuser.name);
         res.status(201).json({
             message: "User created successfully",
             data: newuser

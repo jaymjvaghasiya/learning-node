@@ -21,6 +21,9 @@ const userSchema = new schema({
     roleId: {
         ref: "roles",
         type: schema.Types.ObjectId
+    },
+    email: {
+        type:String
     }
 })
 
