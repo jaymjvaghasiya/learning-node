@@ -97,7 +97,7 @@ const searchUser = (req, res) => {
 
 const getAllUser = async (req, res) => {
     try {
-        const allUsers = await userModel.find();
+        const allUsers = await userModel.find().populate('roleId');
         res.status(200).json({
             message: "User fetched successfully",
             data: allUsers
@@ -127,7 +127,6 @@ const getUserById = async (req, res) => {
 }
 
 const createNewUser = async (req, res) => {
-    console.log("req.body : ", req.body);
     try {
         const newuser = await userModel.create(req.body)
         res.status(201).json({

@@ -17,7 +17,11 @@ const userSchema = new schema({
     },
     hobbies: [{
         type: String
-    }]
+    }],
+    roleId: {
+        ref: "roles",
+        type: schema.Types.ObjectId
+    }
 })
 
 module.exports = mongoose.model("users", userSchema);
