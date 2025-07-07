@@ -12,6 +12,9 @@ app.use('/emp', empRoutes);
 const roleRoutes = require('./src/routes/roleRoutes');
 app.use('/role', roleRoutes);
 
+const uploadRoutes = require('./src/routes/uploadRoutes');
+app.use('/upload', uploadRoutes);
+
 mongoose.connect("mongodb://127.0.0.1:27017/mern-morning-node").then(() => {
     console.log("Database is connected.");
 }).catch((err) => {
