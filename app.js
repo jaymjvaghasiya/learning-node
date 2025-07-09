@@ -1,6 +1,9 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const app = express();
+
+require('dotenv').config();
+
 app.use(express.json());
 
 const userRoutes = require('./src/routes/userRoutes');
@@ -22,6 +25,8 @@ mongoose.connect("mongodb://127.0.0.1:27017/mern-morning-node").then(() => {
     console.log(err);
 })
 
-app.listen(3000, () => {
+const PORT = process.env.PORT;
+
+app.listen(PORT, () => {
     console.log("Server is Running on PORT : 3000");
 })

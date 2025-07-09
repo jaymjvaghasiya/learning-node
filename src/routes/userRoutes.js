@@ -15,5 +15,6 @@ router.get('/getbyid/:id', userController.getUserById);
 router.post('/createnewuser', zodMiddleware(userValidationSchema), userController.createNewUser);
 router.put('/updateuser/:id', userController.updateUser);
 router.delete('/deleteuser/:id', userController.deleteUser);
+router.post('/login', userController.loginUser);
 
 module.exports = router;

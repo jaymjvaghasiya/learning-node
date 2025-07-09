@@ -1,5 +1,6 @@
 const userModel = require('../model/userModel');
 const sendMail = require('../utils/sendMail');
+const bcrypt = require('bcrypt');
 
 const msg = "Internal server err";
 
@@ -129,6 +130,8 @@ const getUserById = async (req, res) => {
 
 const createNewUser = async (req, res) => {
     try {
+        const salt = bcrypt.genSaltSync(10);
+        req.body.password = bcrypt.hashSync(req.body.password, salt);
         const newuser = await userModel.create(req.body)
         await sendMail(newuser.email, "WELCOME", newuser.name);
         res.status(201).json({
@@ -176,4 +179,36 @@ const updateUser = async (req, res) => {
     }
 }
 
-module.exports = { getUsers, getAllUsers, findUserById, searchUser, getAllUser, getUserById, createNewUser, deleteUser, updateUser }
+const loginUser = async (req, res) => {
+    try {
+        const {email, password} = req.body;
+
+        const dbuser = await userModel.findOne({email:email});
+        if(dbuser) {
+            const isAuthenticate = bcrypt.compareSync(password, dbuser.password);
+            if(isAuthenticate) {
+                res.status(200).json({
+                    message: "Login successfull.",
+                    data: dbuser
+                })
+            } else {
+                res.status(403).json({
+                    message: "Invalide Credentials."
+                })
+            }
+        } else {
+            res.status(500).json({
+                message: "User not found"
+            })    
+        }
+
+    } catch(err) {
+        res.status(500).json({
+            message: msg,
+            err: err.message
+        })
+    }
+}
+
+module.exports = { getUsers, getAllUsers, findUserById, searchUser, getAllUser, getUserById, createNewUser, deleteUser, 
+                    updateUser, loginUser }

@@ -8,7 +8,8 @@ const userValidationSchema = zod.object({
     bloodGroup:zod.enum(["A+", "B+", "O+", "O-", "AB+"]),
     hobbies:zod.array(zod.string()),
     roleId:zod.string(),
-    email:zod.string()
+    email:zod.string(),
+    password:zod.string()
 }).strict();
 
 module.exports = userValidationSchema;
