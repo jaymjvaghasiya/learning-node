@@ -1,6 +1,8 @@
 const userModel = require('../model/userModel');
 const sendMail = require('../utils/sendMail');
 const bcrypt = require('bcrypt');
+const JWTToken = require('jsonwebtoken'); 
+require('dotenv').config();
 
 const msg = "Internal server err";
 
@@ -128,6 +130,18 @@ const getUserById = async (req, res) => {
     }
 }
 
+const getUserById2 = async (id) => {
+    try {
+        const user = await userModel.findById(id).populate('roleId');
+        if(user) {
+            return user;
+        } else 
+            return false;
+    } catch(err) {
+        return false;
+    }
+}
+
 const createNewUser = async (req, res) => {
     try {
         const salt = bcrypt.genSaltSync(10);
@@ -186,10 +200,12 @@ const loginUser = async (req, res) => {
         const dbuser = await userModel.findOne({email:email});
         if(dbuser) {
             const isAuthenticate = bcrypt.compareSync(password, dbuser.password);
+            const token = JWTToken.sign({id: dbuser._id}, process.env.ACCESS_KEY, {expiresIn: 60});
+            await userModel.findOneAndUpdate({email:email}, {$set:{token:token}});
             if(isAuthenticate) {
                 res.status(200).json({
                     message: "Login successfull.",
-                    data: dbuser
+                    data: token
                 })
             } else {
                 res.status(403).json({
@@ -211,4 +227,4 @@ const loginUser = async (req, res) => {
 }
 
 module.exports = { getUsers, getAllUsers, findUserById, searchUser, getAllUser, getUserById, createNewUser, deleteUser, 
-                    updateUser, loginUser }
+                    updateUser, loginUser, getUserById2 }

@@ -9,7 +9,8 @@ const userValidationSchema = zod.object({
     hobbies:zod.array(zod.string()),
     roleId:zod.string(),
     email:zod.string(),
-    password:zod.string()
+    password:zod.string(),
+    token:zod.string()
 }).strict();
 
 module.exports = userValidationSchema;

@@ -6,6 +6,23 @@ require('dotenv').config();
 
 app.use(express.json());
 
+
+const {Queue, delay} = require('bullmq');
+const Redis = require('ioredis');
+
+const redisConnection = new Redis({
+    host:"127.0.0.1",
+    port:6379
+})
+
+const myQueue = new Queue("taskQueue", {connection: redisConnection});
+
+app.post("/add-job", async(req, res) => {
+    const {name, email} = req.body;
+    await myQueue.add("task", {name, email}, {delay:0});
+    res.json({success:true, message:"Job added for", name});
+})
+
 const userRoutes = require('./src/routes/userRoutes');
 app.use('/user', userRoutes);
 

@@ -27,6 +27,9 @@ const userSchema = new schema({
     },
     password: {
         type:String
+    },
+    token: {
+        type:String
     }
 })
 
